@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Interactive Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+        }
+        .glow-effect {
+            box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.25);
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <header class="sticky top-0 z-40 glass-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/30">
+                    GI
+                </div>
+                <div>
+                    <span class="text-2xl font-black bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent tracking-tight">go-interactive portal</span>
+                    <span class="text-xs bg-indigo-900/60 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-700/50 ml-2 font-mono hidden sm:inline-block">WEB HUB</span>
+                </div>
+            </div>
+            
+            <!-- Clean Visitor Status (No Admin Login visible) -->
+            <div class="flex items-center space-x-3">
+                <span class="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/60 px-3 py-1.5 rounded-xl border border-emerald-800/50">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Portal Active
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow space-y-8">
+
+        <!-- Hero Banner -->
+        <section class="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-12 border border-indigo-900/40 glow-effect">
+            <div class="absolute -top-24 -left-24 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-4">
+                    Official Web Hub
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4 text-white leading-tight">
+                    Welcome to <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">go-interactive portal</span>
+                </h1>
+                <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                    Nenu create chese prathi chinna web gem, tool mariyu project update direct ga ide single website portal lo live vuntayi.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Feed Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-blue-400"></i>
+                        <span>Portal Updates Feed</span>
+                    </h2>
+                    <span class="text-xs text-gray-400 font-mono bg-gray-900 px-3 py-1 rounded-lg border border-gray-800" id="updateCountText">0 Updates</span>
+                </div>
+
+                <!-- Live Container for Updates -->
+                <div id="updatesContainer" class="space-y-4">
+                    <!-- Dynamic updates appear here -->
+                </div>
+            </div>
+
+            <!-- Right Sidebar Column -->
+            <div class="space-y-6">
+                <div class="glass-card rounded-2xl p-6 border border-gray-800">
+                    <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2 border-b border-gray-800 pb-3">
+                        <i class="fa-solid fa-cubes text-indigo-400"></i>
+                        <span>Web Gems Showcase</span>
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-gray-950/60 rounded-xl border border-gray-800 hover:border-gray-700 transition">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-semibold text-sm text-indigo-300">🌐 Interactive Web Hub</h4>
+                                <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800/50">Active</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Central hub for all web projects and portal announcements.</p>
+                        </div>
+
+                        <div class="p-4 bg-gray-950/60 rounded-xl border border-gray-800">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-semibold text-sm text-purple-300">⚡ Mini Web Apps</h4>
+                                <span class="text-[10px] bg-indigo-950 text-indigo-300 px-2 py-0.5 rounded border border-indigo-800/50">Upcoming</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Custom web tools and interactive modules coming soon.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-gray-800 py-6 text-center text-xs text-gray-500 mt-12">
+        <p>&copy; 2026 <span class="text-gray-300 font-semibold">go-interactive portal</span>. All rights reserved.</p>
+    </footer>
+
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
+        <div class="glass-card border border-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative bg-gray-900">
+            <button onclick="toggleAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-xl transition">&times;</button>
+            
+            <!-- Password View -->
+            <div id="loginView">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-2xl border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-2 text-xl">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Admin Console Login</h3>
+                    <p class="text-xs text-gray-400 mt-1">Updates post cheyadaniki security password enter cheyandi</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Admin Password</label>
+                        <input type="password" id="adminPass" placeholder="Enter Admin Password (default: admin123)" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                    <button onclick="verifyAdmin()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
+                        Login to Admin Console
+                    </button>
+                </div>
+            </div>
+
+            <!-- Publisher View -->
+            <div id="publisherView" class="hidden">
+                <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
+                    <h3 class="text-lg font-bold text-blue-400 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square"></i> Post Update to Feed
+                    </h3>
+                    <button onclick="logoutAdmin()" class="text-xs text-red-400 hover:underline">Logout</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Update Title</label>
+                        <input type="text" id="updateTitle" placeholder="e.g. New Web Gem Launched!" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Content Details</label>
+                        <textarea id="updateDesc" rows="4" placeholder="Write full details here..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-blue-500"></textarea>
+                    </div>
+                    <button onclick="publishUpdate()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-emerald-600/20">
+                        Publish Update Live
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Control
+        function toggleAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Secret URL check: e.g. website.com/?admin=true
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true') {
+                toggleAdminModal();
+            }
+        });
+
+        // Secret Keyboard Shortcut: Ctrl + Shift + A
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+                e.preventDefault();
+                toggleAdminModal();
+            }
+        });
+
+        // Admin Password Verification (Default: admin123)
+        function verifyAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === 'admin123') {
+                document.getElementById('loginView').classList.add('hidden');
+                document.getElementById('publisherView').classList.remove('hidden');
+                document.getElementById('adminPass').value = '';
+            } else {
+                alert('Tappu Password! Default password: admin123');
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('publisherView').classList.add('hidden');
+            document.getElementById('loginView').classList.remove('hidden');
+            toggleAdminModal();
+        }
+
+        // Initialize Feed on load
+        window.onload = function() {
+            loadUpdates();
+        };
+
+        // Publish Update to Portal
+        function publishUpdate() {
+            const title = document.getElementById('updateTitle').value.trim();
+            const desc = document.getElementById('updateDesc').value.trim();
+
+            if(!title || !desc) {
+                alert('Title and Content mandatory!');
+                return;
+            }
+
+            const newUpdate = {
+                id: Date.now(),
+                title: title,
+                desc: desc,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            };
+
+            let updates = JSON.parse(localStorage.getItem('go_interactive_updates')) || [];
+            updates.unshift(newUpdate);
+
+            localStorage.setItem('go_interactive_updates', JSON.stringify(updates));
+
+            document.getElementById('updateTitle').value = '';
+            document.getElementById('updateDesc').value = '';
+            toggleAdminModal();
+
+            loadUpdates();
+        }
+
+        // Load & Render Feed Items
+        function loadUpdates() {
+            let updates = JSON.parse(localStorage.getItem('go_interactive_updates')) || [];
+            const container = document.getElementById('updatesContainer');
+            const countText = document.getElementById('updateCountText');
+
+            countText.innerText = `${updates.length + 1} Updates`;
+
+            let html = updates.map(item => `
+                <div class="glass-card rounded-2xl p-6 border border-gray-800 relative hover:border-gray-700 transition">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-blue-300 text-base">${escapeHtml(item.title)}</h3>
+                        <span class="text-xs text-gray-500 font-mono">${item.date}</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4">${escapeHtml(item.desc)}</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500 border-t border-gray-800/60 pt-3">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-user-check text-indigo-400"></i> Posted by Admin</span>
+                        <button onclick="deleteUpdate(${item.id})" class="text-red-400 hover:text-red-300 transition text-[11px]"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // System default post
+            html += `
+                <div class="glass-card rounded-2xl p-6 border border-gray-800 relative">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-blue-300 text-base">🎉 go-interactive portal is Live!</h3>
+                        <span class="text-xs text-gray-500 font-mono">Official</span>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                        Welcome to the official web hub. Prathi new web gem, project release mariyu developer news ide single portal feed lo update ivvadam jaruguthundi.
+                    </p>
+                    <div class="flex items-center text-xs text-gray-500 gap-2 border-t border-gray-800/60 pt-3">
+                        <i class="fa-solid fa-user-check text-indigo-400"></i>
+                        <span>Posted by Admin</span>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function deleteUpdate(id) {
+            let updates = JSON.parse(localStorage.getItem('go_interactive_updates')) || [];
+            updates = updates.filter(item => item.id !== id);
+            localStorage.setItem('go_interactive_updates', JSON.stringify(updates));
+            loadUpdates();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
+```
