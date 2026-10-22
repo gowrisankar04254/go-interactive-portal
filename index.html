@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -12,6 +11,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDKs for Cloud Firestore integration -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -44,7 +47,7 @@
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Header (Clean header without Admin navigation button) -->
+    <!-- Header -->
     <header class="gradient-header text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
@@ -58,8 +61,8 @@
             </div>
             
             <div class="text-xs text-blue-200 hidden sm:block">
-                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
-                Public View
+                <span id="sync-indicator-dot" class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
+                <span id="sync-indicator-text">Public Live View</span>
             </div>
         </div>
     </header>
@@ -76,15 +79,15 @@
                     <input type="text" id="search-input" onkeyup="filterPosts()" placeholder="Search announcements or links..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
                 </div>
                 <div class="flex items-center space-x-2 text-xs text-slate-500 w-full sm:w-auto justify-between sm:justify-end">
-                    <span id="post-count" class="font-semibold text-slate-700">0 Items Published</span>
+                    <span id="post-count" class="font-semibold text-slate-700">Loading...</span>
                     <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-emerald-600 font-medium">Live Sync Active</span>
+                    <span id="db-status-badge" class="text-emerald-600 font-medium">Cloud Database Connected</span>
                 </div>
             </div>
 
             <!-- Announcements Grid / Feed -->
             <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <!-- Posts will be dynamically inserted here -->
+                <!-- Dynamic Posts -->
             </div>
 
             <!-- Empty State -->
@@ -98,7 +101,6 @@
         </section>
 
         <!-- ==================== HIDDEN ADMIN CONSOLE SECTION ==================== -->
-        <!-- Accessible ONLY via URL ending with ?admin=true or #admin -->
         <section id="admin-section" class="hidden space-y-6">
             
             <!-- Admin Banner -->
@@ -107,7 +109,7 @@
                 <button onclick="exitAdmin()" class="text-amber-800 font-bold hover:underline">Exit to Public Site &rarr;</button>
             </div>
 
-            <!-- Admin Login Box (if not authenticated) -->
+            <!-- Admin Login Box -->
             <div id="admin-login-card" class="max-w-md mx-auto bg-white p-6 md:p-8 rounded-2xl border border-slate-200 card-shadow">
                 <div class="text-center mb-6">
                     <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl border border-brand-100">
@@ -129,9 +131,8 @@
                 </form>
             </div>
 
-            <!-- Admin Dashboard Panel (after login) -->
+            <!-- Admin Dashboard Panel -->
             <div id="admin-dashboard" class="hidden space-y-6">
-                <!-- Admin Header & Logout -->
                 <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 rounded-2xl flex justify-between items-center shadow-lg">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center">
@@ -182,7 +183,7 @@
                         </div>
 
                         <div class="flex justify-end">
-                            <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition shadow-md shadow-emerald-600/20 flex items-center space-x-2">
+                            <button type="submit" id="publish-btn" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition shadow-md shadow-emerald-600/20 flex items-center space-x-2">
                                 <i class="fa-solid fa-paper-plane text-xs"></i>
                                 <span>Publish Post Live</span>
                             </button>
@@ -223,12 +224,40 @@
         </div>
     </footer>
 
-    <!-- Application Logic Script -->
+    <!-- Firebase Config & Logic -->
     <script>
+        // FIREBASE CONFIGURATION PLACEHOLDERS
+        // Paste your exact keys from Firebase Console below:
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        let db = null;
+        let isFirebaseActive = false;
+        let cachedPosts = [];
+
+        // Initialize Firebase if configured
+        try {
+            if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                isFirebaseActive = true;
+                console.log("Firebase Firestore initialized successfully!");
+            } else {
+                console.warn("Firebase config keys missing. Falling back to localStorage.");
+            }
+        } catch (e) {
+            console.error("Firebase init error:", e);
+        }
+
         const STORAGE_KEY = 'go_interactive_portal_posts';
         const AUTH_KEY = 'go_interactive_admin_authenticated';
 
-        // Sample initial data if storage is empty
         const initialSamplePosts = [
             {
                 id: '1',
@@ -237,39 +266,92 @@
                 linkText: 'Visit Central Guidelines',
                 linkUrl: 'https://example.com',
                 timestamp: new Date().toISOString()
-            },
-            {
-                id: '2',
-                title: 'Portal System Launch Announcement',
-                message: 'All interactive links and update documents can now be accessed directly without registration.',
-                linkText: 'Download PDF Overview',
-                linkUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-                timestamp: new Date(Date.now() - 3600000 * 24).toISOString()
             }
         ];
 
-        // Load Posts
-        function getPosts() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (!saved) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(initialSamplePosts));
-                return initialSamplePosts;
-            }
-            try {
-                return JSON.parse(saved);
-            } catch (e) {
-                return [];
+        function fetchPosts(callback) {
+            if (isFirebaseActive && db) {
+                document.getElementById('db-status-badge').textContent = 'Cloud Live Database Active';
+                db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                    const posts = [];
+                    snapshot.forEach((doc) => {
+                        posts.push({ id: doc.id, ...doc.data() });
+                    });
+                    cachedPosts = posts;
+                    if (callback) callback(posts);
+                    renderPublicPosts();
+                    renderAdminTable();
+                }, (error) => {
+                    console.error("Firestore listen error:", error);
+                    loadLocalPosts(callback);
+                });
+            } else {
+                document.getElementById('db-status-badge').textContent = 'Local Mode (Set Firebase Keys)';
+                document.getElementById('db-status-badge').className = 'text-amber-600 font-medium';
+                loadLocalPosts(callback);
             }
         }
 
-        // Save Posts
-        function savePosts(posts) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+        function loadLocalPosts(callback) {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initialSamplePosts));
+                cachedPosts = initialSamplePosts;
+            } else {
+                try {
+                    cachedPosts = JSON.parse(saved);
+                } catch (e) {
+                    cachedPosts = [];
+                }
+            }
+            if (callback) callback(cachedPosts);
             renderPublicPosts();
             renderAdminTable();
         }
 
-        // Check URL route to reveal or hide Admin Console
+        async function saveNewPost(newPostData) {
+            const publishBtn = document.getElementById('publish-btn');
+            publishBtn.disabled = true;
+            publishBtn.innerText = 'Publishing...';
+
+            if (isFirebaseActive && db) {
+                try {
+                    await db.collection("posts").add(newPostData);
+                    alert('Announcement published live to Cloud Database!');
+                } catch (err) {
+                    alert('Error publishing to cloud: ' + err.message);
+                }
+            } else {
+                const posts = [ { id: Date.now().toString(), ...newPostData }, ...cachedPosts ];
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+                cachedPosts = posts;
+                renderPublicPosts();
+                renderAdminTable();
+                alert('Published to Local Storage (Configure Firebase keys for cloud live sync).');
+            }
+
+            publishBtn.disabled = false;
+            publishBtn.innerHTML = '<i class="fa-solid fa-paper-plane text-xs"></i><span>Publish Post Live</span>';
+        }
+
+        async function deletePost(id) {
+            if (!confirm('Are you sure you want to delete this announcement?')) return;
+
+            if (isFirebaseActive && db) {
+                try {
+                    await db.collection("posts").doc(id).delete();
+                    alert('Post deleted from Cloud Database!');
+                } catch (err) {
+                    alert('Error deleting post: ' + err.message);
+                }
+            } else {
+                cachedPosts = cachedPosts.filter(p => p.id !== id);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedPosts));
+                renderPublicPosts();
+                renderAdminTable();
+            }
+        }
+
         function checkUrlRoute() {
             const urlParams = new URLSearchParams(window.location.search);
             const isAdminParam = urlParams.get('admin') === 'true' || urlParams.has('admin');
@@ -285,7 +367,6 @@
             } else {
                 pubSection.classList.remove('hidden');
                 admSection.classList.add('hidden');
-                renderPublicPosts();
             }
         }
 
@@ -293,7 +374,6 @@
             window.location.href = window.location.pathname;
         }
 
-        // Render Public View Posts
         function renderPublicPosts() {
             const container = document.getElementById('posts-container');
             const emptyState = document.getElementById('empty-state');
@@ -301,10 +381,9 @@
             const searchInput = document.getElementById('search-input');
             const query = searchInput ? searchInput.value.toLowerCase() : '';
 
-            const posts = getPosts();
-            const filtered = posts.filter(p => 
-                p.title.toLowerCase().includes(query) || 
-                p.message.toLowerCase().includes(query)
+            const filtered = cachedPosts.filter(p => 
+                (p.title && p.title.toLowerCase().includes(query)) || 
+                (p.message && p.message.toLowerCase().includes(query))
             );
 
             postCount.textContent = `${filtered.length} Items Published`;
@@ -317,11 +396,11 @@
 
             emptyState.classList.add('hidden');
             container.innerHTML = filtered.map(post => {
-                const dateStr = new Date(post.timestamp).toLocaleDateString('te-IN', {
+                const dateStr = post.timestamp ? new Date(post.timestamp).toLocaleDateString('te-IN', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric'
-                });
+                }) : 'Today';
 
                 const hasLink = post.linkUrl && post.linkUrl.trim() !== '';
                 const linkLabel = post.linkText && post.linkText.trim() !== '' ? post.linkText : 'Open Tagged Link';
@@ -355,15 +434,14 @@
             }).join('');
         }
 
-        // Render Admin Management Table
         function renderAdminTable() {
             const body = document.getElementById('admin-table-body');
             const countLabel = document.getElementById('admin-item-count');
-            const posts = getPosts();
 
-            countLabel.textContent = `${posts.length} Items`;
+            if (!body) return;
+            countLabel.textContent = `${cachedPosts.length} Items`;
 
-            if (posts.length === 0) {
+            if (cachedPosts.length === 0) {
                 body.innerHTML = `
                     <tr>
                         <td colspan="4" class="text-center py-6 text-slate-400">No published items yet.</td>
@@ -372,8 +450,8 @@
                 return;
             }
 
-            body.innerHTML = posts.map(post => {
-                const dateStr = new Date(post.timestamp).toLocaleDateString();
+            body.innerHTML = cachedPosts.map(post => {
+                const dateStr = post.timestamp ? new Date(post.timestamp).toLocaleDateString() : 'N/A';
                 const hasLink = post.linkUrl && post.linkUrl.trim() !== '';
 
                 return `
@@ -400,12 +478,10 @@
             }).join('');
         }
 
-        // Search Filter
         function filterPosts() {
             renderPublicPosts();
         }
 
-        // Admin Auth Check
         function checkAdminAuth() {
             const isAuthenticated = sessionStorage.getItem(AUTH_KEY) === 'true';
             const loginCard = document.getElementById('admin-login-card');
@@ -421,7 +497,6 @@
             }
         }
 
-        // Handle Admin Login
         function handleLogin(event) {
             event.preventDefault();
             const passcode = document.getElementById('admin-passcode').value;
@@ -435,13 +510,11 @@
             }
         }
 
-        // Handle Logout
         function handleLogout() {
             sessionStorage.removeItem(AUTH_KEY);
             checkAdminAuth();
         }
 
-        // Handle Create Post
         function handleCreatePost(event) {
             event.preventDefault();
             
@@ -456,7 +529,6 @@
             }
 
             const newPost = {
-                id: Date.now().toString(),
                 title,
                 message,
                 linkText,
@@ -464,28 +536,14 @@
                 timestamp: new Date().toISOString()
             };
 
-            const posts = getPosts();
-            posts.unshift(newPost);
-            savePosts(posts);
+            saveNewPost(newPost);
 
             document.getElementById('post-title').value = '';
             document.getElementById('post-message').value = '';
             document.getElementById('post-link-text').value = '';
             document.getElementById('post-link-url').value = '';
-
-            alert('Announcement successfully published to Go-Interactive Portal!');
         }
 
-        // Delete Post
-        function deletePost(id) {
-            if (confirm('Are you sure you want to delete this announcement?')) {
-                let posts = getPosts();
-                posts = posts.filter(p => p.id !== id);
-                savePosts(posts);
-            }
-        }
-
-        // Helper function to sanitize HTML text
         function escapeHTML(str) {
             if (!str) return '';
             return str
@@ -496,15 +554,16 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // Initialize view based on URL route
         window.onload = function() {
             checkUrlRoute();
+            fetchPosts();
         };
 
-        // Listen for hash changes
         window.onhashchange = function() {
             checkUrlRoute();
         };
     </script>
 </body>
 </html>
+
+ 
