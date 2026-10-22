@@ -4,325 +4,507 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Go Interactive Portal</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Go-Interactive Portal</title>
+    <!-- Tailwind CSS for modern responsive styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #030712;
-            color: #f3f4f6;
+        .gradient-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
         }
-        .glow-effect {
-            box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.25);
-        }
-        .glass-card {
-            background: rgba(17, 24, 39, 0.75);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
 
-    <header class="sticky top-0 z-40 glass-card border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <!-- Header (Clean header without Admin navigation button) -->
+    <header class="gradient-header text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/30">
-                    GI
+                <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-md border border-white/20">
+                    <i class="fa-solid font-bold fa-globe text-2xl text-blue-200"></i>
                 </div>
                 <div>
-                    <span class="text-2xl font-black bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent tracking-tight">go-interactive portal</span>
-                    <span class="text-xs bg-indigo-900/60 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-700/50 ml-2 font-mono hidden sm:inline-block">WEB HUB</span>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">Go-Interactive Portal</h1>
+                    <p class="text-xs text-blue-200 font-medium">Centralized Announcement & Tagged Link Hub</p>
                 </div>
             </div>
             
-            <!-- Clean Visitor Status (No Admin Login visible) -->
-            <div class="flex items-center space-x-3">
-                <span class="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/60 px-3 py-1.5 rounded-xl border border-emerald-800/50">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Portal Active
-                </span>
+            <div class="text-xs text-blue-200 hidden sm:block">
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
+                Public View
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow space-y-8">
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6">
 
-        <!-- Hero Banner -->
-        <section class="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-12 border border-indigo-900/40 glow-effect">
-            <div class="absolute -top-24 -left-24 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div class="max-w-3xl">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-4">
-                    Official Web Hub
-                </span>
-                <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4 text-white leading-tight">
-                    Welcome to <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">go-interactive portal</span>
-                </h1>
-                <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
-                    Nenu create chese prathi chinna web gem, tool mariyu project update direct ga ide single website portal lo live vuntayi.
-                </p>
+        <!-- ==================== PUBLIC PORTAL SECTION ==================== -->
+        <section id="public-section" class="space-y-6">
+            <!-- Search & Filter Bar -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 card-shadow flex flex-col sm:flex-row gap-3 justify-between items-center">
+                <div class="relative w-full sm:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                    <input type="text" id="search-input" onkeyup="filterPosts()" placeholder="Search announcements or links..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
+                </div>
+                <div class="flex items-center space-x-2 text-xs text-slate-500 w-full sm:w-auto justify-between sm:justify-end">
+                    <span id="post-count" class="font-semibold text-slate-700">0 Items Published</span>
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-emerald-600 font-medium">Live Sync Active</span>
+                </div>
+            </div>
+
+            <!-- Announcements Grid / Feed -->
+            <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Posts will be dynamically inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
+                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-regular fa-folder-open"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-700 mb-1">No Announcements Found</h3>
+                <p class="text-xs text-slate-500 max-w-sm mx-auto">There are currently no active messages published on the Go-Interactive Portal. Check back soon!</p>
             </div>
         </section>
 
-        <!-- Main Grid Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- ==================== HIDDEN ADMIN CONSOLE SECTION ==================== -->
+        <!-- Accessible ONLY via URL ending with ?admin=true or #admin -->
+        <section id="admin-section" class="hidden space-y-6">
             
-            <!-- Left Feed Column -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-bullhorn text-blue-400"></i>
-                        <span>Portal Updates Feed</span>
-                    </h2>
-                    <span class="text-xs text-gray-400 font-mono bg-gray-900 px-3 py-1 rounded-lg border border-gray-800" id="updateCountText">0 Updates</span>
-                </div>
-
-                <!-- Live Container for Updates -->
-                <div id="updatesContainer" class="space-y-4">
-                    <!-- Dynamic updates appear here -->
-                </div>
+            <!-- Admin Banner -->
+            <div class="bg-amber-50 border border-amber-200 text-amber-900 p-3 rounded-xl text-xs flex justify-between items-center">
+                <span class="font-medium"><i class="fa-solid fa-user-shield mr-2 text-amber-600"></i>Hidden Admin Route Activated</span>
+                <button onclick="exitAdmin()" class="text-amber-800 font-bold hover:underline">Exit to Public Site &rarr;</button>
             </div>
 
-            <!-- Right Sidebar Column -->
-            <div class="space-y-6">
-                <div class="glass-card rounded-2xl p-6 border border-gray-800">
-                    <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2 border-b border-gray-800 pb-3">
-                        <i class="fa-solid fa-cubes text-indigo-400"></i>
-                        <span>Web Gems Showcase</span>
-                    </h2>
-                    <div class="space-y-3">
-                        <div class="p-4 bg-gray-950/60 rounded-xl border border-gray-800 hover:border-gray-700 transition">
-                            <div class="flex justify-between items-center mb-1">
-                                <h4 class="font-semibold text-sm text-indigo-300">🌐 Interactive Web Hub</h4>
-                                <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800/50">Active</span>
-                            </div>
-                            <p class="text-xs text-gray-400">Central hub for all web projects and portal announcements.</p>
+            <!-- Admin Login Box (if not authenticated) -->
+            <div id="admin-login-card" class="max-w-md mx-auto bg-white p-6 md:p-8 rounded-2xl border border-slate-200 card-shadow">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl border border-brand-100">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-800">Admin Console Login</h2>
+                    <p class="text-xs text-slate-500 mt-1">Authorized access only for portal administrators.</p>
+                </div>
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Passcode / Secret Key</label>
+                        <input type="password" id="admin-passcode" required placeholder="Enter admin passcode (Default: admin123)" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
+                        <p class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-circle-info mr-1"></i>Default passcode: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-600 font-mono">admin123</code></p>
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-xl transition shadow-md shadow-brand-500/20 flex items-center justify-center space-x-2">
+                        <span>Authenticate Access</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Admin Dashboard Panel (after login) -->
+            <div id="admin-dashboard" class="hidden space-y-6">
+                <!-- Admin Header & Logout -->
+                <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 rounded-2xl flex justify-between items-center shadow-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-user-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm">Authenticated Admin Mode</h3>
+                            <p class="text-xs text-slate-400">Post new tagged updates or manage portal feed</p>
+                        </div>
+                    </div>
+                    <button onclick="handleLogout()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-semibold text-slate-200 rounded-lg transition border border-slate-600">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Lock Console
+                    </button>
+                </div>
+
+                <!-- Create Post Form -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
+                    <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
+                        <i class="fa-solid fa-pen-to-square text-brand-600 mr-2"></i>
+                        Publish New Announcement & Tagged Link
+                    </h3>
+                    <form onsubmit="handleCreatePost(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Announcement Title *</label>
+                            <input type="text" id="post-title" required placeholder="e.g., Important Portal Update / Circular No. 4" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
                         </div>
 
-                        <div class="p-4 bg-gray-950/60 rounded-xl border border-gray-800">
-                            <div class="flex justify-between items-center mb-1">
-                                <h4 class="font-semibold text-sm text-purple-300">⚡ Mini Web Apps</h4>
-                                <span class="text-[10px] bg-indigo-950 text-indigo-300 px-2 py-0.5 rounded border border-indigo-800/50">Upcoming</span>
-                            </div>
-                            <p class="text-xs text-gray-400">Custom web tools and interactive modules coming soon.</p>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Message Description *</label>
+                            <textarea id="post-message" rows="3" required placeholder="Write the detailed message or news summary here..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"></textarea>
                         </div>
+
+                        <!-- Tagged Link Section -->
+                        <div class="p-4 bg-brand-50/50 rounded-xl border border-brand-100 space-y-3">
+                            <div class="flex items-center text-xs font-bold text-brand-900">
+                                <i class="fa-solid fa-link text-brand-600 mr-2"></i> Tagged External Link (Optional)
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Link Button Text</label>
+                                    <input type="text" id="post-link-text" placeholder="e.g., Download Document / Open Form" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Target URL (Web Address)</label>
+                                    <input type="url" id="post-link-url" placeholder="https://example.com/file.pdf" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition shadow-md shadow-emerald-600/20 flex items-center space-x-2">
+                                <i class="fa-solid fa-paper-plane text-xs"></i>
+                                <span>Publish Post Live</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Admin Management Table -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
+                    <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center justify-between">
+                        <span><i class="fa-solid fa-list-check text-slate-600 mr-2"></i> Manage Published Items</span>
+                        <span id="admin-item-count" class="text-xs bg-slate-100 px-2.5 py-1 rounded-full text-slate-600 font-medium">0 Items</span>
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 font-semibold uppercase tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="p-3">Title & Message</th>
+                                    <th class="p-3">Tagged Link</th>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body" class="divide-y divide-slate-100">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-        </div>
-
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="glass-card border-t border-gray-800 py-6 text-center text-xs text-gray-500 mt-12">
-        <p>&copy; 2026 <span class="text-gray-300 font-semibold">go-interactive portal</span>. All rights reserved.</p>
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p>&copy; 2026 <span class="font-bold text-slate-700">Go-Interactive Portal</span>. All rights reserved.</p>
+        </div>
     </footer>
 
-    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
-        <div class="glass-card border border-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative bg-gray-900">
-            <button onclick="toggleAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-xl transition">&times;</button>
-            
-            <!-- Password View -->
-            <div id="loginView">
-                <div class="text-center mb-6">
-                    <div class="w-12 h-12 bg-blue-500/10 rounded-2xl border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-2 text-xl">
-                        <i class="fa-solid fa-lock"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white">Admin Console Login</h3>
-                    <p class="text-xs text-gray-400 mt-1">Updates post cheyadaniki security password enter cheyandi</p>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1">Admin Password</label>
-                        <input type="password" id="adminPass" placeholder="Enter Admin Password (default: admin123)" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-blue-500 transition">
-                    </div>
-                    <button onclick="verifyAdmin()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
-                        Login to Admin Console
-                    </button>
-                </div>
-            </div>
-
-            <!-- Publisher View -->
-            <div id="publisherView" class="hidden">
-                <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
-                    <h3 class="text-lg font-bold text-blue-400 flex items-center gap-2">
-                        <i class="fa-solid fa-pen-to-square"></i> Post Update to Feed
-                    </h3>
-                    <button onclick="logoutAdmin()" class="text-xs text-red-400 hover:underline">Logout</button>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1">Update Title</label>
-                        <input type="text" id="updateTitle" placeholder="e.g. New Web Gem Launched!" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1">Content Details</label>
-                        <textarea id="updateDesc" rows="4" placeholder="Write full details here..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-blue-500"></textarea>
-                    </div>
-                    <button onclick="publishUpdate()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-emerald-600/20">
-                        Publish Update Live
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Application Logic Script -->
     <script>
-        // Modal Control
-        function toggleAdminModal() {
-            const modal = document.getElementById('adminModal');
-            modal.classList.toggle('hidden');
+        const STORAGE_KEY = 'go_interactive_portal_posts';
+        const AUTH_KEY = 'go_interactive_admin_authenticated';
+
+        // Sample initial data if storage is empty
+        const initialSamplePosts = [
+            {
+                id: '1',
+                title: 'Welcome to Go-Interactive Portal',
+                message: 'This is the central portal for all public announcements and tagged resources. Stay tuned for real-time updates.',
+                linkText: 'Visit Central Guidelines',
+                linkUrl: 'https://example.com',
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: '2',
+                title: 'Portal System Launch Announcement',
+                message: 'All interactive links and update documents can now be accessed directly without registration.',
+                linkText: 'Download PDF Overview',
+                linkUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                timestamp: new Date(Date.now() - 3600000 * 24).toISOString()
+            }
+        ];
+
+        // Load Posts
+        function getPosts() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initialSamplePosts));
+                return initialSamplePosts;
+            }
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                return [];
+            }
         }
 
-        // Secret URL check: e.g. website.com/?admin=true
-        window.addEventListener('DOMContentLoaded', () => {
+        // Save Posts
+        function savePosts(posts) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+            renderPublicPosts();
+            renderAdminTable();
+        }
+
+        // Check URL route to reveal or hide Admin Console
+        function checkUrlRoute() {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'true') {
-                toggleAdminModal();
-            }
-        });
+            const isAdminParam = urlParams.get('admin') === 'true' || urlParams.has('admin');
+            const isAdminHash = window.location.hash === '#admin';
 
-        // Secret Keyboard Shortcut: Ctrl + Shift + A
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-                e.preventDefault();
-                toggleAdminModal();
-            }
-        });
+            const pubSection = document.getElementById('public-section');
+            const admSection = document.getElementById('admin-section');
 
-        // Admin Password Verification (Default: admin123)
-        function verifyAdmin() {
-            const pass = document.getElementById('adminPass').value;
-            if (pass === 'admin123') {
-                document.getElementById('loginView').classList.add('hidden');
-                document.getElementById('publisherView').classList.remove('hidden');
-                document.getElementById('adminPass').value = '';
+            if (isAdminParam || isAdminHash) {
+                pubSection.classList.add('hidden');
+                admSection.classList.remove('hidden');
+                checkAdminAuth();
             } else {
-                alert('Tappu Password! Default password: admin123');
+                pubSection.classList.remove('hidden');
+                admSection.classList.add('hidden');
+                renderPublicPosts();
             }
         }
 
-        function logoutAdmin() {
-            document.getElementById('publisherView').classList.add('hidden');
-            document.getElementById('loginView').classList.remove('hidden');
-            toggleAdminModal();
+        function exitAdmin() {
+            window.location.href = window.location.pathname;
         }
 
-        // Initialize Feed on load
-        window.onload = function() {
-            loadUpdates();
-        };
+        // Render Public View Posts
+        function renderPublicPosts() {
+            const container = document.getElementById('posts-container');
+            const emptyState = document.getElementById('empty-state');
+            const postCount = document.getElementById('post-count');
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput ? searchInput.value.toLowerCase() : '';
 
-        // Publish Update to Portal
-        function publishUpdate() {
-            const title = document.getElementById('updateTitle').value.trim();
-            const desc = document.getElementById('updateDesc').value.trim();
+            const posts = getPosts();
+            const filtered = posts.filter(p => 
+                p.title.toLowerCase().includes(query) || 
+                p.message.toLowerCase().includes(query)
+            );
 
-            if(!title || !desc) {
-                alert('Title and Content mandatory!');
+            postCount.textContent = `${filtered.length} Items Published`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
                 return;
             }
 
-            const newUpdate = {
-                id: Date.now(),
-                title: title,
-                desc: desc,
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            emptyState.classList.add('hidden');
+            container.innerHTML = filtered.map(post => {
+                const dateStr = new Date(post.timestamp).toLocaleDateString('te-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                const hasLink = post.linkUrl && post.linkUrl.trim() !== '';
+                const linkLabel = post.linkText && post.linkText.trim() !== '' ? post.linkText : 'Open Tagged Link';
+
+                return `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 card-shadow flex flex-col justify-between hover:border-brand-200 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 bg-blue-50 text-brand-600 rounded-full border border-blue-100">
+                                    Announcement
+                                </span>
+                                <span class="text-[11px] text-slate-400 font-medium">
+                                    <i class="fa-regular fa-clock mr-1"></i>${dateStr}
+                                </span>
+                            </div>
+                            <h3 class="font-bold text-base text-slate-800 mb-2 leading-snug">${escapeHTML(post.title)}</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4 whitespace-pre-line">${escapeHTML(post.message)}</p>
+                        </div>
+
+                        ${hasLink ? `
+                            <div class="pt-3 border-t border-slate-100 mt-auto">
+                                <a href="${escapeHTML(post.linkUrl)}" target="_blank" rel="noopener noreferrer" 
+                                   class="inline-flex items-center justify-between w-full px-4 py-2.5 bg-brand-50 hover:bg-brand-100/80 text-brand-700 font-semibold text-xs rounded-xl transition group">
+                                    <span class="truncate"><i class="fa-solid fa-arrow-up-right-from-square mr-2 text-brand-500"></i>${escapeHTML(linkLabel)}</span>
+                                    <i class="fa-solid fa-chevron-right text-[10px] text-brand-400 group-hover:translate-x-0.5 transition-transform"></i>
+                                </a>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Admin Management Table
+        function renderAdminTable() {
+            const body = document.getElementById('admin-table-body');
+            const countLabel = document.getElementById('admin-item-count');
+            const posts = getPosts();
+
+            countLabel.textContent = `${posts.length} Items`;
+
+            if (posts.length === 0) {
+                body.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center py-6 text-slate-400">No published items yet.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            body.innerHTML = posts.map(post => {
+                const dateStr = new Date(post.timestamp).toLocaleDateString();
+                const hasLink = post.linkUrl && post.linkUrl.trim() !== '';
+
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3">
+                            <p class="font-bold text-slate-800">${escapeHTML(post.title)}</p>
+                            <p class="text-[11px] text-slate-500 truncate max-w-xs">${escapeHTML(post.message)}</p>
+                        </td>
+                        <td class="p-3">
+                            ${hasLink ? `
+                                <a href="${escapeHTML(post.linkUrl)}" target="_blank" class="text-brand-600 hover:underline font-medium text-[11px] flex items-center">
+                                    <i class="fa-solid fa-link mr-1"></i>${escapeHTML(post.linkText || 'Link')}
+                                </a>
+                            ` : '<span class="text-slate-400 italic">None</span>'}
+                        </td>
+                        <td class="p-3 text-slate-500 text-[11px] whitespace-nowrap">${dateStr}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="deletePost('${post.id}')" class="px-2.5 py-1 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition text-[11px] font-semibold">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Search Filter
+        function filterPosts() {
+            renderPublicPosts();
+        }
+
+        // Admin Auth Check
+        function checkAdminAuth() {
+            const isAuthenticated = sessionStorage.getItem(AUTH_KEY) === 'true';
+            const loginCard = document.getElementById('admin-login-card');
+            const dashboard = document.getElementById('admin-dashboard');
+
+            if (isAuthenticated) {
+                loginCard.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                renderAdminTable();
+            } else {
+                loginCard.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+            }
+        }
+
+        // Handle Admin Login
+        function handleLogin(event) {
+            event.preventDefault();
+            const passcode = document.getElementById('admin-passcode').value;
+            
+            if (passcode === 'admin123') {
+                sessionStorage.setItem(AUTH_KEY, 'true');
+                document.getElementById('admin-passcode').value = '';
+                checkAdminAuth();
+            } else {
+                alert('Incorrect passcode! Default passcode is: admin123');
+            }
+        }
+
+        // Handle Logout
+        function handleLogout() {
+            sessionStorage.removeItem(AUTH_KEY);
+            checkAdminAuth();
+        }
+
+        // Handle Create Post
+        function handleCreatePost(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('post-title').value.trim();
+            const message = document.getElementById('post-message').value.trim();
+            const linkText = document.getElementById('post-link-text').value.trim();
+            const linkUrl = document.getElementById('post-link-url').value.trim();
+
+            if (!title || !message) {
+                alert('Please enter both title and message.');
+                return;
+            }
+
+            const newPost = {
+                id: Date.now().toString(),
+                title,
+                message,
+                linkText,
+                linkUrl,
+                timestamp: new Date().toISOString()
             };
 
-            let updates = JSON.parse(localStorage.getItem('go_interactive_updates')) || [];
-            updates.unshift(newUpdate);
+            const posts = getPosts();
+            posts.unshift(newPost);
+            savePosts(posts);
 
-            localStorage.setItem('go_interactive_updates', JSON.stringify(updates));
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-message').value = '';
+            document.getElementById('post-link-text').value = '';
+            document.getElementById('post-link-url').value = '';
 
-            document.getElementById('updateTitle').value = '';
-            document.getElementById('updateDesc').value = '';
-            toggleAdminModal();
-
-            loadUpdates();
+            alert('Announcement successfully published to Go-Interactive Portal!');
         }
 
-        // Load & Render Feed Items
-        function loadUpdates() {
-            let updates = JSON.parse(localStorage.getItem('go_interactive_updates')) || [];
-            const container = document.getElementById('updatesContainer');
-            const countText = document.getElementById('updateCountText');
-
-            countText.innerText = `${updates.length + 1} Updates`;
-
-            let html = updates.map(item => `
-                <div class="glass-card rounded-2xl p-6 border border-gray-800 relative hover:border-gray-700 transition">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-bold text-blue-300 text-base">${escapeHtml(item.title)}</h3>
-                        <span class="text-xs text-gray-500 font-mono">${item.date}</span>
-                    </div>
-                    <p class="text-gray-300 text-sm leading-relaxed mb-4">${escapeHtml(item.desc)}</p>
-                    <div class="flex items-center justify-between text-xs text-gray-500 border-t border-gray-800/60 pt-3">
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-user-check text-indigo-400"></i> Posted by Admin</span>
-                        <button onclick="deleteUpdate(${item.id})" class="text-red-400 hover:text-red-300 transition text-[11px]"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-            `).join('');
-
-            // System default post
-            html += `
-                <div class="glass-card rounded-2xl p-6 border border-gray-800 relative">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-bold text-blue-300 text-base">🎉 go-interactive portal is Live!</h3>
-                        <span class="text-xs text-gray-500 font-mono">Official</span>
-                    </div>
-                    <p class="text-gray-300 text-sm leading-relaxed mb-4">
-                        Welcome to the official web hub. Prathi new web gem, project release mariyu developer news ide single portal feed lo update ivvadam jaruguthundi.
-                    </p>
-                    <div class="flex items-center text-xs text-gray-500 gap-2 border-t border-gray-800/60 pt-3">
-                        <i class="fa-solid fa-user-check text-indigo-400"></i>
-                        <span>Posted by Admin</span>
-                    </div>
-                </div>
-            `;
-
-            container.innerHTML = html;
+        // Delete Post
+        function deletePost(id) {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                let posts = getPosts();
+                posts = posts.filter(p => p.id !== id);
+                savePosts(posts);
+            }
         }
 
-        function deleteUpdate(id) {
-            let updates = JSON.parse(localStorage.getItem('go_interactive_updates')) || [];
-            updates = updates.filter(item => item.id !== id);
-            localStorage.setItem('go_interactive_updates', JSON.stringify(updates));
-            loadUpdates();
+        // Helper function to sanitize HTML text
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
 
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
+        // Initialize view based on URL route
+        window.onload = function() {
+            checkUrlRoute();
+        };
+
+        // Listen for hash changes
+        window.onhashchange = function() {
+            checkUrlRoute();
+        };
     </script>
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCOhdThAeaLlwg0nZ5q0b7VAM2a-JzA_O8",
-    authDomain: "go-interactive-portal.firebaseapp.com",
-    projectId: "go-interactive-portal",
-    storageBucket: "go-interactive-portal.firebasestorage.app",
-    messagingSenderId: "46327209602",
-    appId: "1:46327209602:web:10311cff7ecdc722d05e9b",
-    measurementId: "G-0N7DBJV2Z2"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 </body>
 </html>
-```
